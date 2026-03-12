@@ -1,5 +1,6 @@
 /* =====================================
    RCVER - CONSULTA VEHICULAR
+   Versión simplificada: búsqueda solo con botón
 ===================================== */
 
 /* BLOQUEAR SI NO HAY LOGIN */
@@ -10,52 +11,39 @@ if (sessionStorage.getItem("loginActivo") !== "true") {
 let vehiculos = [];
 let datosCargados = false;
 
-
 /* =========================
-   CARGAR JSON
+   CARGAR JSON (vehiculos + vehiculos1)
 ========================= */
 function cargarVehiculos() {
+    Promise.all([
+        fetch("vehiculos.json").then(r => r.json()),
+        fetch("vehiculos1.json").then(r => r.json())
+    ])
+    .then(([data1, data2]) => {
+        const todos = [...data1, ...data2]; // unimos ambos arrays
 
-    fetch("vehiculos.json")
-        .then(response => response.json())
-        .then(data => {
+        vehiculos = todos
+            .filter(v => v && v.DOMINIO)
+            .map(v => ({
+                dominio: String(v.DOMINIO || "").toLowerCase().replace(/[-\s]/g,""),
+                marca: v.MARCA || "SIN DATOS",
+                modelo: v.MODELO || "SIN DATOS",
+                color: v.COLOR || "SIN DATOS",
+                motor: String(v["N° DE MOTOR"] || "").toLowerCase().replace(/[-\s]/g,""),
+                chasis: String(v["N° DE CHASIS"] || "").toLowerCase().replace(/[-\s]/g,""),
+                estado: v.CRIA || "SIN DATOS"
+            }));
 
-            vehiculos = data
-                .filter(v => v && v.DOMINIO)
-                .map(v => ({
-
-                    dominio: String(v.DOMINIO)
-                        .toLowerCase()
-                        .replace(/[-\s]/g,""),
-
-                    marca: v.MARCA || "SIN DATOS",
-                    modelo: v.MODELO || "SIN DATOS",
-                    color: v.COLOR || "SIN DATOS",
-
-                    motor: String(v["N° DE MOTOR"] || "")
-                        .toLowerCase()
-                        .replace(/[-\s]/g,""),
-
-                    chasis: String(v["N° DE CHASIS"] || "")
-                        .toLowerCase()
-                        .replace(/[-\s]/g,""),
-
-                    estado: v.CRIA || "SIN DATOS"
-                }));
-
-            datosCargados = true;
-
-            console.log("✅ JSON cargado:", vehiculos.length);
-        })
-        .catch(error => console.error("❌ Error JSON:", error));
+        datosCargados = true;
+        console.log("✅ JSON cargados:", vehiculos.length);
+    })
+    .catch(error => console.error("❌ Error cargando JSON:", error));
 }
 
-
 /* =========================
-   BUSCAR
+   BUSCAR VEHÍCULO (solo botón)
 ========================= */
 function buscarVehiculo() {
-
     const texto = document.getElementById("busqueda")
         .value
         .trim()
@@ -81,45 +69,43 @@ function buscarVehiculo() {
     );
 
     if (encontrado) {
-
         resultado.innerHTML = `
-            <div class="text-success">
-                ✅ VEHÍCULO CON PEDIDO<br><br>
-                Marca: ${encontrado.marca}<br>
-                Modelo: ${encontrado.modelo}<br>
-                Color: ${encontrado.color}<br>
-                Dominio: ${encontrado.dominio.toUpperCase()}<br>
-                Estado: ${encontrado.estado}
+            <div class="card text-dark bg-success mb-3 p-3">
+                <h5>✅ VEHÍCULO CON PEDIDO</h5>
+                <p>
+                    Marca: ${encontrado.marca}<br>
+                    Modelo: ${encontrado.modelo}<br>
+                    Color: ${encontrado.color}<br>
+                    Dominio: ${encontrado.dominio.toUpperCase()}<br>
+                    Estado: ${encontrado.estado}
+                </p>
             </div>
         `;
-
     } else {
-
         resultado.innerHTML = `
-            <div class="text-danger">
+            <div class="card text-white bg-danger mb-3 p-3">
                 ❌ SIN PEDIDO DE SECUESTRO
             </div>
         `;
     }
 }
 
-
 /* =========================
    INICIO
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-
     cargarVehiculos();
 
+    // Buscar solo con botón
     document
         .getElementById("btnBuscar")
         .addEventListener("click", buscarVehiculo);
 
+    // Cerrar sesión
     document
         .getElementById("btnCerrar")
         .addEventListener("click", () => {
             sessionStorage.removeItem("loginActivo");
             window.location.href = "index.html";
         });
-
 });

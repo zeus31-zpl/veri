@@ -1,0 +1,138 @@
+/* =====================================
+   RCVER - ESTILO PROFESIONAL
+===================================== */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;
+    color: #eaeaea;
+}
+
+/* =========================
+   TITULO
+========================= */
+.titulo-logo {
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+}
+
+/* =========================
+   TARJETAS
+========================= */
+.login-card {
+    background-color: #1e1e1e;
+    border: 1px solid #2f2f2f;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+/* =========================
+   INPUTS
+========================= */
+.form-control {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+
+.form-control::placeholder {
+    color: #9a9a9a;
+}
+
+.form-control:focus {
+    background-color: #2a2a2a;
+    color: #fff;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.btn {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* PRIMARY */
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+/* WARNING */
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+/* INFO */
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+}
+
+/* SECONDARY */
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* =========================
+   RESULTADOS
+========================= */
+.text-success {
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: #28d17c !important;
+}
+
+.text-danger {
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: #ff4d4d !important;
+}
+
+/* =========================
+   ANIMACION SUAVE RESULTADO
+========================= */
+#resultado {
+    animation: aparecer 0.3s ease;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
